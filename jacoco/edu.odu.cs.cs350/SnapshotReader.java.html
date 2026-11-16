@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SnapshotReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">edu.odu.cs.cs350</a> &gt; <span class="el_source">SnapshotReader.java</span></div><h1>SnapshotReader.java</h1><pre class="source lang-java linenums">package edu.odu.cs.cs350;
+
+import java.io.File; 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+/**
+ * Locates and reads enrollment snapshot files.
+ * 
+ * Finds CSV snapshot files from a given directory,
+ * reads their rows, and converts them into Section objects.
+ */
+<span class="nc" id="L18">public class SnapshotReader {</span>
+
+    // CSV Column Positions
+    private static final int CRN = 1;
+    private static final int COURSE_NAME = 2;
+    private static final int COURSE_NUMBER = 3;
+    private static final int COURSE_TITLE = 4;
+    private static final int CROSS_LIST_CAPACITY = 6;
+    private static final int NUM_ENROLLED = 7;
+    private static final int CROSS_LIST_GROUP = 9;
+    private static final int OVERALL_CAPACITY = 22;
+
+    /**
+     * Validates the command-line arguments and lists
+     * CSV files in a specified directory.
+     *
+     * @param args command-line arguments containing
+     *             path to the directory
+     * @return 0 if arguments are valid, 1 otherwise
+     */
+    public static int run(String[] args) {
+<span class="fc" id="L39">        String directoryPath = getDirectory(args);</span>
+
+<span class="fc bfc" id="L41" title="All 4 branches covered.">        if (directoryPath == null || directoryPath.isBlank()) {</span>
+<span class="fc" id="L42">            System.err.println(&quot;Error: No directory provided.&quot;);</span>
+<span class="fc" id="L43">            return 1;</span>
+        }
+
+<span class="fc" id="L46">        File directory = new File(directoryPath);</span>
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (!directory.isDirectory()) {</span>
+<span class="fc" id="L49">            System.err.println(&quot;Error: Invalid directory.&quot;);</span>
+<span class="fc" id="L50">            return 1;</span>
+        }
+
+<span class="fc" id="L53">        File[] csvFiles = getCSVFiles(directory);</span>
+
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (csvFiles == null) {</span>
+<span class="nc" id="L56">            System.err.println(&quot;Error: Unable to retrieve CSV files.&quot;);</span>
+<span class="nc" id="L57">            return 1;</span>
+        }
+
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        for (File file : csvFiles) {</span>
+<span class="nc" id="L61">            System.out.println(file.getName());</span>
+        }
+
+<span class="fc" id="L64">        return 0;</span>
+    }
+
+    /**
+     * Obtains a directory path provided through
+     * command-line arguments.
+     *
+     * @param args command-line arguments containing
+     *             a directory path
+     * @return a directory path, or null if no
+     *         directory was provided
+     */
+    public static String getDirectory(String[] args) {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (args.length == 0) {</span>
+<span class="fc" id="L78">            return null;</span>
+        }
+
+<span class="fc" id="L81">        return args[0];</span>
+    }
+
+    /**
+     * Retrieves files and subdirectories contained
+     * within a specified directory.
+     *
+     * @param directory to retrieve contents from
+     * @return an array containing the contents of a directory,
+     *         or null if the directory is invalid or unreadable
+     */
+    public static File[] getDirectoryContents(File directory) {
+<span class="fc bfc" id="L93" title="All 4 branches covered.">        if (directory == null || !directory.isDirectory()) {</span>
+<span class="fc" id="L94">            return null;</span>
+        }
+
+<span class="fc" id="L97">        return directory.listFiles();</span>
+    }
+
+    /**
+     * Retrieves CSV files from a specified directory.
+     *
+     * @param directory containing CSV files
+     * @return an array containing CSV files, or null
+     *         if the directory is invalid or unreadable
+     */
+    public static File[] getCSVFiles(File directory) {
+<span class="fc" id="L108">        File[] contents = getDirectoryContents(directory);</span>
+
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (contents == null) {</span>
+<span class="fc" id="L111">            return null;</span>
+        }
+
+<span class="fc" id="L114">        File[] csvFiles = new File[contents.length];</span>
+<span class="fc" id="L115">        int count = 0;</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (File file : contents) {</span>
+<span class="fc bfc" id="L118" title="All 4 branches covered.">            if (file.isFile() &amp;&amp; file.getName().endsWith(&quot;.csv&quot;)) {</span>
+<span class="fc" id="L119">                csvFiles[count] = file;</span>
+<span class="fc" id="L120">                count++;</span>
+            }
+        }
+
+<span class="fc" id="L124">        File[] result = Arrays.copyOf(csvFiles, count);</span>
+<span class="fc" id="L125">        Arrays.sort(result);</span>
+
+<span class="fc" id="L127">        return result;</span>
+    }
+
+    /**
+     * Retrieves the grouping key for a section and
+     * uses the CRN if section has no cross-list group.
+     *
+     * @param section to retrieve the group key from
+     * @return the cross-list group or CRN
+     */
+    public static String getGroupKey(Section section) {
+<span class="fc" id="L138">        String group = section.getCrossListGroup();</span>
+
+<span class="pc bpc" id="L140" title="1 of 4 branches missed.">        if (group == null || group.isBlank()) {</span>
+<span class="fc" id="L141">            return section.getCRN();</span>
+        }
+
+<span class="fc" id="L144">        return group;</span>
+    }
+
+    /**
+     * Retrieves a CSV snapshot file for a specified date.
+     *
+     * @param directory containing CSV files
+     * @param date of the requested snapshot
+     * @return the matching CSV file, or null if
+     *         no matching file is found
+     */
+    public static File getSnapshotFile(File directory, String date) {
+<span class="fc" id="L156">        File[] csvFiles = getCSVFiles(directory);</span>
+
+<span class="fc bfc" id="L158" title="All 4 branches covered.">        if (csvFiles == null || date == null) {</span>
+<span class="fc" id="L159">            return null;</span>
+        }
+
+<span class="fc" id="L162">        String fileName = date + &quot;.csv&quot;;</span>
+
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        for (File file : csvFiles) {</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            if (file.getName().equals(fileName)) {</span>
+<span class="fc" id="L166">                return file;</span>
+            }
+        }
+
+<span class="fc" id="L170">        return null;</span>
+    }
+
+    /**
+     * Parses a CSV line into a Section object.
+     *
+     * @param fields the fields of the CSV file
+     * @return a Section object containing enrollment data
+     */
+    public static Section parseSection(String[] fields) {
+<span class="fc bfc" id="L180" title="All 4 branches covered.">        if (fields == null || fields.length &lt;= CROSS_LIST_GROUP) {</span>
+<span class="fc" id="L181">            throw new IllegalArgumentException(&quot;Expected at least &quot; + (CROSS_LIST_GROUP + 1) + &quot; fields.&quot;);</span>
+        }
+
+<span class="fc" id="L184">        String crossListGroup = fields[CROSS_LIST_GROUP];</span>
+<span class="fc" id="L185">        int numEnrolled = Integer.parseInt(fields[NUM_ENROLLED].trim());</span>
+<span class="fc" id="L186">        int crossListCapacity = Integer.parseInt(fields[CROSS_LIST_CAPACITY].trim());</span>
+<span class="fc" id="L187">        String crn = fields[CRN];</span>
+
+<span class="fc" id="L189">        return new Section(crossListGroup, numEnrolled, crossListCapacity, crn);</span>
+    }
+
+    /**
+     * Groups sections by their cross-list group.
+     * Sections without a cross-list group are grouped by CRN.
+     *
+     * @param sections the sections to organize
+     * @return a map containing grouped sections
+     */
+    public static Map&lt;String, List&lt;Section&gt;&gt; groupSectionsByCrossList(
+            List&lt;Section&gt; sections) {
+
+<span class="fc" id="L202">        Map&lt;String, List&lt;Section&gt;&gt; groups = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (Section section : sections) {</span>
+<span class="fc" id="L205">            groups.computeIfAbsent(getGroupKey(section), key -&gt; new ArrayList&lt;&gt;()).add(section);</span>
+<span class="fc" id="L206">        }</span>
+
+<span class="fc" id="L208">        return groups;</span>
+    }
+
+    /**
+     * Reads section data from a CSV snapshot and 
+     * converts rows into Section objects.
+     *
+     * @param file the CSV snapshot file
+     * @return a list of sections from the snapshot
+     * @throws IOException if the file cannot be read
+     */
+    public static List&lt;Section&gt; readSnapshot(File file) throws IOException {
+<span class="fc" id="L220">        List&lt;Section&gt; sections = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L221">        List&lt;String[]&gt; rows = readSnapshotRows(file);</span>
+
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        for (String[] fields : rows) {</span>
+<span class="fc" id="L224">            sections.add(parseSection(fields));</span>
+<span class="fc" id="L225">        }</span>
+
+<span class="fc" id="L227">        return sections;</span>
+    }
+
+    /**
+     * Reads the rows of a CSV snapshot. Header row 
+     * and blank lines are ignored.
+     *
+     * @param file the CSV snapshot file
+     * @return a list of rows from the snapshot
+     * @throws IOException if an error occurs when reading the file
+     */
+    public static List&lt;String[]&gt; readSnapshotRows(File file) throws IOException {
+<span class="fc" id="L239">        List&lt;String[]&gt; rows = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L240">        List&lt;String&gt; lines = Files.readAllLines(file.toPath());</span>
+
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        for (int i = 1; i &lt; lines.size(); i++) {</span>
+<span class="fc" id="L243">            String line = lines.get(i);</span>
+
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">            if (line.isBlank()) {</span>
+<span class="nc" id="L246">                continue;</span>
+            }
+
+            // Split on commas that are outside of double quotes
+<span class="fc" id="L250">            String[] fields = line.split(&quot;,(?=(?:[^\&quot;]*\&quot;[^\&quot;]*\&quot;)*[^\&quot;]*$)&quot;, -1);</span>
+
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            for (int j = 0; j &lt; fields.length; j++) {</span>
+<span class="fc" id="L253">                fields[j] = fields[j].replaceAll(&quot;^\&quot;|\&quot;$&quot;, &quot;&quot;);</span>
+            }
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (isExcludedSection(fields)){</span>
+<span class="fc" id="L256">                continue;</span>
+            }
+<span class="fc" id="L258">            rows.add(fields);</span>
+        }
+
+<span class="fc" id="L261">        return rows;</span>
+    }
+
+    /**
+     * Extracts the course identifier from CSV fields.
+     * 
+     * @param fields the fields of the CSV file 
+     * @return the course identifier
+     * @throws IllegalArgumentException if the fields array is null or has elements less than or equal to COURSE_NUMBER
+     */
+    public static String getCourseIdentifier(String[] fields) {
+<span class="pc bpc" id="L272" title="2 of 4 branches missed.">        if (fields == null || fields.length &lt;= COURSE_NUMBER) {</span>
+<span class="nc" id="L273">            throw new IllegalArgumentException(&quot;Expected at least &quot; + (COURSE_NUMBER + 1) + &quot; fields.&quot;);</span>
+        }
+
+<span class="fc" id="L276">        return fields[COURSE_NAME] + fields[COURSE_NUMBER];</span>
+    }
+
+    /**
+     * Extracts the course title from CSV fields.
+     * 
+     * @param fields the fields of the CSV file
+     * @return the course title
+     * @throws IllegalArgumentException if the fields array is null or has elements less than or equal to COURSE_TITLE
+     */
+    public static String getCourseTitle(String[] fields) {
+<span class="pc bpc" id="L287" title="2 of 4 branches missed.">        if (fields == null || fields.length &lt;= COURSE_TITLE) {</span>
+<span class="nc" id="L288">            throw new IllegalArgumentException(&quot;Expected at least &quot; + (COURSE_TITLE + 1) + &quot; fields.&quot;);</span>
+        }
+
+<span class="fc" id="L291">        return fields[COURSE_TITLE];</span>
+    }
+
+    /**
+     * Finds existing labs and recitations within CSV title field
+     * and extracts the course title without lab or recitation information.
+     */
+    public static boolean isExcludedSection(String[] fields) {
+<span class="fc" id="L299">        String title = getCourseTitle(fields).toUpperCase();</span>
+<span class="fc bfc" id="L300" title="All 4 branches covered.">        if (title.contains(&quot; LAB&quot;) || title.contains(&quot; REC&quot;)) {</span>
+<span class="fc" id="L301">            return true;</span>
+        }
+<span class="fc" id="L303">        return false;</span>
+    }
+
+    /**
+     * Retrieves the overall offering capacity from a CSV record.
+     *
+     * @param fields the CSV record fields
+     * @return the overall offering capacity
+     * @throws IllegalArgumentException if the record is invalid
+     */
+    public static int getOverallCapacity(String[] fields) {
+<span class="pc bpc" id="L314" title="2 of 4 branches missed.">        if (fields == null || fields.length &lt;= OVERALL_CAPACITY) {</span>
+<span class="nc" id="L315">            throw new IllegalArgumentException(&quot;Expected at least &quot; + (OVERALL_CAPACITY + 1) + &quot; fields.&quot;);</span>
+        }
+
+<span class="fc" id="L318">        return Integer.parseInt(fields[OVERALL_CAPACITY].trim());</span>
+    }
+
+    /**
+     * Creates an Offering from a list of sections.
+     *
+     * @param sections the sections belonging to the offering
+     * @param overallCapacity the overall offering capacity
+     * @return the constructed Offering object
+     */
+    public static Offering createOffering(List&lt;Section&gt; sections, int overallCapacity) {
+
+<span class="fc" id="L330">        return new Offering(sections, overallCapacity);</span>
+    }
+
+    /**
+     * Determines whether a CSV record has a value in the
+     * overall capacity column.
+     *
+     * @param fields the CSV record fields
+     * @return true if the overall capacity is present and not blank
+     */
+    private static boolean hasOverallCapacity(String[] fields) {
+
+<span class="pc bpc" id="L342" title="1 of 4 branches missed.">        return fields.length &gt; OVERALL_CAPACITY &amp;&amp; !fields[OVERALL_CAPACITY].isBlank();</span>
+    }
+
+    /**
+     * Creates Offering objects from CSV snapshot records.
+     *
+     * @param rows the CSV records containing section information
+     * @return a list of Offering objects
+     */
+    public static List&lt;Offering&gt; createOfferingsFromRows(List&lt;String[]&gt; rows) {
+<span class="fc" id="L352">        Map&lt;String, List&lt;Section&gt;&gt; groups = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L353">        Map&lt;String, Integer&gt; capacities = new LinkedHashMap&lt;&gt;();</span>
+ 
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        for (String[] fields : rows) {</span>
+<span class="fc" id="L356">            Section section = parseSection(fields);</span>
+<span class="fc" id="L357">            String group = getGroupKey(section);</span>
+ 
+<span class="fc" id="L359">            List&lt;Section&gt; members = groups.get(group);</span>
+ 
+<span class="fc bfc" id="L361" title="All 2 branches covered.">           if (members == null) {</span>
+<span class="fc" id="L362">                members = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L363">                groups.put(group, members);</span>
+<span class="fc" id="L364">                capacities.put(group, section.getCrossListCapacity());</span>
+            }
+
+<span class="fc bfc" id="L367" title="All 2 branches covered.">            if (hasOverallCapacity(fields)) {</span>
+<span class="fc" id="L368">                capacities.put(group, getOverallCapacity(fields));</span>
+            }
+
+<span class="fc" id="L371">            members.add(section);</span>
+<span class="fc" id="L372">        }</span>
+
+<span class="fc" id="L374">        List&lt;Offering&gt; offerings = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L376" title="All 2 branches covered.">        for (String group : groups.keySet()) {</span>
+<span class="fc" id="L377">            offerings.add(createOffering(groups.get(group), capacities.get(group)));</span>
+<span class="fc" id="L378">        }</span>
+
+<span class="fc" id="L380">        return offerings;</span>
+    }
+
+    /**
+     * Creates a Course from its name and associated Offerings.
+     *
+     * @param courseName the name of the course
+     * @param offerings the Offerings belonging to the course
+     * @return the constructed Course object
+     */
+    public static Course createCourse(String courseName, List&lt;Offering&gt; offerings) {
+
+<span class="fc" id="L392">        return new Course(courseName, offerings);</span>
+    }
+
+    /**
+     * Creates Course objects from CSV snapshot data.
+     *
+     * @param rows the CSV records containing course information
+     * @return a list of Course objects
+     */
+    public static List&lt;Course&gt; createCoursesFromRows(List&lt;String[]&gt; rows) {
+<span class="fc" id="L402">        Map&lt;String, List&lt;String[]&gt;&gt; courseRows = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        for (String[] fields : rows) {</span>
+<span class="fc" id="L405">            String courseName = getCourseIdentifier(fields);</span>
+<span class="fc" id="L406">            courseRows.computeIfAbsent(courseName, key -&gt; new ArrayList&lt;&gt;()).add(fields);</span>
+<span class="fc" id="L407">        }</span>
+
+<span class="fc" id="L409">        List&lt;Course&gt; courses = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        for (String courseName : courseRows.keySet()) {</span>
+<span class="fc" id="L412">            List&lt;Offering&gt; offerings =createOfferingsFromRows(courseRows.get(courseName));</span>
+<span class="fc" id="L413">            courses.add(createCourse(courseName, offerings));</span>
+<span class="fc" id="L414">        }</span>
+
+<span class="fc" id="L416">        return courses;</span>
+    }
+
+    /**
+     * Creates a SemesterSnapshot from a date and list of courses.
+     *
+     * @param date of the enrollment snapshot
+     * @param courses belonging to the snapshot
+     * @return the constructed SemesterSnapshot object
+     */
+    public static SemesterSnapshot createSemesterSnapshot(String date, List&lt;Course&gt; courses) {
+
+<span class="fc" id="L428">        return new SemesterSnapshot(date, courses);</span>
+    }
+
+    /**
+     * Creates a SemesterSnapshot from CSV records.
+     *
+     * @param date the date of the enrollment snapshot
+     * @param rows the CSV records containing course information
+     * @return the constructed SemesterSnapshot object
+     */
+    public static SemesterSnapshot createSemesterSnapshotFromRows(String date, List&lt;String[]&gt; rows) {
+<span class="fc" id="L439">        List&lt;Course&gt; courses = createCoursesFromRows(rows);</span>
+
+<span class="fc" id="L441">        return createSemesterSnapshot(date, courses);</span>
+    }
+
+    /**
+     * Reads a CSV snapshot file and constructs a SemesterSnapshot.
+     *
+     * @param file the CSV snapshot file
+     * @param date the date of the snapshot
+     * @return the constructed SemesterSnapshot object
+     * @throws IOException if the file cannot be read
+     */
+    public static SemesterSnapshot readSemesterSnapshot(File file, String date) throws IOException {
+<span class="fc" id="L453">        List&lt;String[]&gt; rows = readSnapshotRows(file);</span>
+
+<span class="fc" id="L455">        return createSemesterSnapshotFromRows(date, rows);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

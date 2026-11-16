@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Section.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">edu.odu.cs.cs350</a> &gt; <span class="el_source">Section.java</span></div><h1>Section.java</h1><pre class="source lang-java linenums">package edu.odu.cs.cs350; 
+
+/**
+* Represents a course section with the offering it's under (crossListGroup), the number enrolled,
+* the capacity of the section, and the CRN.
+**/
+public class Section implements Cloneable {
+    private String crossListGroup;
+    private int numEnrolled;
+    private int crossListCapacity;
+    private String CRN;
+
+    /**
+    * Default constructor for Section
+    **/
+<span class="fc" id="L16">    public Section(){</span>
+<span class="fc" id="L17">        this.crossListGroup = &quot;&quot;;</span>
+<span class="fc" id="L18">        this.numEnrolled = 0;</span>
+<span class="fc" id="L19">        this.crossListCapacity = 0; </span>
+<span class="fc" id="L20">        this.CRN = &quot;&quot;;</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+    * Full constructor for section
+    **/
+<span class="fc" id="L26">    public Section(String crossListGroup, int numberEnrolled, int crossListCapacity, String CRN) {</span>
+<span class="fc" id="L27">        this.crossListGroup = crossListGroup;</span>
+<span class="fc" id="L28">        this.numEnrolled = numberEnrolled;</span>
+<span class="fc" id="L29">        this.crossListCapacity = crossListCapacity;</span>
+<span class="fc" id="L30">        this.CRN = CRN;</span>
+<span class="fc" id="L31">    }</span>
+
+    public String getCrossListGroup(){
+<span class="fc" id="L34">        return crossListGroup; </span>
+    }
+
+    public void setCrossListGroup(String crossListGroup){
+<span class="fc" id="L38">        this.crossListGroup = crossListGroup; </span>
+<span class="fc" id="L39">    }</span>
+
+    public int getNumEnrolled(){
+<span class="fc" id="L42">        return numEnrolled;</span>
+    }
+
+    public void setNumEnrolled(int numberEnrolled){
+<span class="fc" id="L46">        this.numEnrolled = numberEnrolled;</span>
+<span class="fc" id="L47">    }</span>
+
+    public int getCrossListCapacity(){
+<span class="fc" id="L50">        return crossListCapacity;</span>
+    }
+
+    public void setCrossListCapacity(int crossListCapacity){
+<span class="fc" id="L54">        this.crossListCapacity = crossListCapacity; </span>
+<span class="fc" id="L55">    }</span>
+
+    public String getCRN(){
+<span class="fc" id="L58">        return CRN; </span>
+    }
+
+    public void setCRN(String CRN){
+<span class="fc" id="L62">        this.CRN = CRN; </span>
+<span class="fc" id="L63">    }</span>
+
+    @Override 
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (obj instanceof Section) {</span>
+<span class="fc" id="L68">            Section s = (Section) obj;</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            if (!CRN.equals(s.CRN))</span>
+<span class="fc" id="L70">                return false;</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            return CRN == s.CRN;</span>
+        } else
+<span class="nc" id="L73">            return false;</span>
+    }
+
+    @Override 
+    public int hashCode() {
+<span class="fc" id="L78">        return CRN.hashCode();</span>
+    }
+
+    @Override
+    public String toString(){
+<span class="fc" id="L83">        String sectionString = (&quot;crossListGroup: &quot; + crossListGroup);</span>
+<span class="fc" id="L84">        sectionString += (&quot;\n&quot; + &quot;number enrolled: &quot; + numEnrolled);</span>
+<span class="fc" id="L85">        sectionString += (&quot;\n&quot; + &quot;total capacity: &quot; + crossListCapacity);</span>
+<span class="fc" id="L86">        sectionString += (&quot;\n&quot; + &quot;CRN: &quot; + CRN);</span>
+<span class="fc" id="L87">        return sectionString;</span>
+    }
+
+    @Override
+    public Section clone() {
+<span class="fc" id="L92">        Section clone = new Section(this.crossListGroup, this.numEnrolled, this.crossListCapacity, this.CRN);</span>
+<span class="fc" id="L93">        return clone;</span>
+    }
+   
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

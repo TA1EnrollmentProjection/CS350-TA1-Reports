@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Course.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">edu.odu.cs.cs350</a> &gt; <span class="el_source">Course.java</span></div><h1>Course.java</h1><pre class="source lang-java linenums">package edu.odu.cs.cs350;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Represents a course offered by ODU with the course name, number of enrolled students,
+ * total capacity of enrolled students, and the list of course offerings.
+ * 
+ * @author David Ortiz
+ */
+public class Course implements Comparable&lt;Course&gt;, Cloneable {
+    // Data members
+    private final String courseName;
+    private final int numEnrolledStudents;
+    private final int totalEnrolledCapacity;
+    private final List&lt;Offering&gt; courseOfferings;
+
+    /**
+     * Default constructor for Course.
+     */
+<span class="fc" id="L22">    public Course() {</span>
+<span class="fc" id="L23">        this.courseName = &quot;&quot;;</span>
+<span class="fc" id="L24">        this.numEnrolledStudents = 0;</span>
+<span class="fc" id="L25">        this.totalEnrolledCapacity = 0;</span>
+<span class="fc" id="L26">        this.courseOfferings = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Primary full constructor for Course.
+     * 
+     * @param courseName the name of the course
+     * @param courseOfferings a List of Offerings comprising the Course
+     */
+<span class="fc" id="L35">    public Course(String courseName, List&lt;Offering&gt; courseOfferings) {</span>
+<span class="fc" id="L36">        this.courseName = courseName;</span>
+<span class="fc" id="L37">        this.courseOfferings = cloneOfferings(courseOfferings);</span>
+<span class="fc" id="L38">        this.totalEnrolledCapacity = sumTotalCapacityInOfferings(this.courseOfferings);</span>
+<span class="fc" id="L39">        this.numEnrolledStudents = sumEnrolledInOfferings(this.courseOfferings);</span>
+<span class="fc" id="L40">    }</span>
+
+    /** 
+     * Secondary full constructor for Course.
+     * 
+     * @param courseName the name of the course
+     * @param numEnrolledStudents the number of students enrolled
+     * @param totalEnrolledCapacity the max capacity of enrolled students
+     * @param courseOfferings a List of Offerings comprising the Course
+     */
+    public Course(String courseName, 
+                  int numEnrolledStudents, 
+                  int totalEnrolledCapacity, 
+<span class="fc" id="L53">                  List&lt;Offering&gt; courseOfferings) {</span>
+<span class="fc" id="L54">        this.courseName = courseName;</span>
+<span class="fc" id="L55">        this.numEnrolledStudents = numEnrolledStudents;</span>
+<span class="fc" id="L56">        this.totalEnrolledCapacity = totalEnrolledCapacity;</span>
+<span class="fc" id="L57">        this.courseOfferings = courseOfferings;</span>
+<span class="fc" id="L58">    }</span>
+
+    private List&lt;Offering&gt; cloneOfferings(List&lt;Offering&gt; courseOfferings) {
+<span class="fc" id="L61">        List&lt;Offering&gt; cloned = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for (Offering offer : courseOfferings) {</span>
+<span class="fc" id="L63">            cloned.add(offer.clone());</span>
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">        return cloned;</span>
+    }
+
+    private int sumEnrolledInOfferings(List&lt;Offering&gt; offerings) {
+<span class="fc" id="L69">        int sum = 0;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        for (Offering offering : offerings) {</span>
+<span class="fc" id="L71">            sum += offering.getNumEnrolled();</span>
+<span class="fc" id="L72">        }</span>
+        // Safeguard against more enrolled than capacity
+        // May remove this check later
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (sum &gt; totalEnrolledCapacity) {</span>
+<span class="nc" id="L76">            return totalEnrolledCapacity;</span>
+        } else {
+<span class="fc" id="L78">            return sum;</span>
+        }   
+    }
+
+    private int sumTotalCapacityInOfferings(List&lt;Offering&gt; offerings) {
+<span class="fc" id="L83">        int sum = 0;</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        for (Offering offering : offerings) {</span>
+<span class="fc" id="L85">            sum += offering.getOfferingCapacity();</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">        return sum;</span>
+    }
+
+    /**
+     * Get the number of enrolled students in the Course.
+     * 
+     * @return the number of enrolled students
+     */
+    public int getNumEnrolledStudents() {
+<span class="fc" id="L96">        return numEnrolledStudents;</span>
+    }
+
+    /**
+     * Get the name of the course.
+     * 
+     * @return the name of the course
+     */
+    public String getCourseName() {
+<span class="fc" id="L105">        return courseName;</span>
+    }
+
+    /** 
+     * Get the total enrolled capacity of the course.
+     * 
+     * @return the total enrolled capacity
+     */
+    public int getTotalEnrolledCapacity() {
+<span class="fc" id="L114">        return totalEnrolledCapacity;</span>
+    }
+
+    /**
+     * Compares two Course objects for sorting.
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(Course other) {
+<span class="fc" id="L124">        return this.courseName.compareTo(other.courseName);</span>
+        
+    }
+
+    /**
+     * Provides a deep copy of the Course object.
+     * 
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public Course clone() {
+<span class="fc" id="L135">        List&lt;Offering&gt; cloneOfferings = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for (Offering offer : courseOfferings) {</span>
+<span class="fc" id="L137">            cloneOfferings.add(offer.clone());</span>
+<span class="fc" id="L138">        }</span>
+<span class="fc" id="L139">        return new Course(this.courseName, this.numEnrolledStudents, </span>
+                          this.totalEnrolledCapacity, cloneOfferings);
+    }
+
+    /**
+     * Compares two Course objects for equality based on 
+     * course name and the number of enrolled students
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (this == obj) {</span>
+<span class="fc" id="L152">            return true;</span>
+        }
+<span class="pc bpc" id="L154" title="2 of 4 branches missed.">        if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L155">            return false;</span>
+        }
+<span class="fc" id="L157">        Course course = (Course) obj;</span>
+<span class="fc bfc" id="L158" title="All 4 branches covered.">        return courseName.equals(course.courseName) &amp;&amp; </span>
+               numEnrolledStudents == course.numEnrolledStudents;
+    }
+
+    /**
+     * Computes the hashcode value of a Course object
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L169">        int result = courseName.hashCode();</span>
+<span class="fc" id="L170">        result = (31 * result) + (373 * numEnrolledStudents);</span>
+<span class="fc" id="L171">        return result;</span>
+    }
+
+    /**
+     * Gives a String displaying course name, number of 
+     * enrolled students, and total capacity of students
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L182">        return String.format(&quot;Course Name: %s\tEnrolled Students: %d\tCapacity: %d%n&quot;, </span>
+<span class="fc" id="L183">                             courseName, numEnrolledStudents, totalEnrolledCapacity);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

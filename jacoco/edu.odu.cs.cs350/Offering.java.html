@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Offering.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">edu.odu.cs.cs350</a> &gt; <span class="el_source">Offering.java</span></div><h1>Offering.java</h1><pre class="source lang-java linenums">package edu.odu.cs.cs350;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+* Represents an offering with a list of sections, the total number of students enrolled, and the offering's capacity.
+**/
+public class Offering implements Cloneable {
+    private int numEnrolled;
+    private int offeringCapacity;
+    private List&lt;Section&gt; sections;  
+
+    /**
+     * Default constructor for Offering
+     */
+<span class="fc" id="L17">    public Offering(){</span>
+<span class="fc" id="L18">        this.numEnrolled = 0;  </span>
+<span class="fc" id="L19">        this.offeringCapacity = 0; </span>
+<span class="fc" id="L20">        this.sections = new ArrayList&lt;&gt;(); </span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Full constructor for Offering with manual input for capacity and enrollment
+     * @param sections
+     * @param offeringCapacity
+     * @param numEnrolled
+     */
+<span class="fc" id="L29">    public Offering(List&lt;Section&gt; sections, int offeringCapacity, int numEnrolled) {</span>
+<span class="fc" id="L30">        this.numEnrolled = numEnrolled;</span>
+<span class="fc" id="L31">        this.offeringCapacity = offeringCapacity;</span>
+<span class="fc" id="L32">        this.sections = sections; </span>
+
+<span class="fc" id="L34">    }</span>
+
+    /**
+     * constructor for Offering with manual input for capacity, automatic calculation of enrollment
+     * @param sections
+     * @param offeringCapacity
+     */
+<span class="fc" id="L41">    public Offering(List&lt;Section&gt; sections, int offeringCapacity) {</span>
+<span class="fc" id="L42">        numEnrolled = 0; </span>
+<span class="fc" id="L43">        this.offeringCapacity = offeringCapacity;</span>
+<span class="fc" id="L44">        this.sections = sections;</span>
+<span class="fc" id="L45">        totalSectionEnrollment();</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * constructor for Offering with automatic calculation of capacity and enrollment
+     * @param sections
+     */
+<span class="fc" id="L52">    public Offering(List&lt;Section&gt; sections) {</span>
+<span class="fc" id="L53">        this.sections = sections;</span>
+<span class="fc" id="L54">        totalSectionCapacity();</span>
+<span class="fc" id="L55">        totalSectionEnrollment();</span>
+<span class="fc" id="L56">    }</span>
+
+    public int getNumEnrolled(){
+<span class="fc" id="L59">        return numEnrolled;</span>
+    }
+
+    public void setNumEnrolled(int numEnrolled){
+<span class="fc" id="L63">        this.numEnrolled = numEnrolled;</span>
+<span class="fc" id="L64">    }</span>
+
+    public int getOfferingCapacity(){
+<span class="fc" id="L67">        return offeringCapacity;</span>
+    }
+
+    public void setOfferingCapacity(int offeringCapacity){
+<span class="fc" id="L71">        this.offeringCapacity = offeringCapacity;</span>
+<span class="fc" id="L72">    }</span>
+
+    public List&lt;Section&gt; getSections(){
+<span class="fc" id="L75">        return sections; </span>
+    }
+
+    /**
+     * Calculates the enrollment of an Offering by summing the enrollment of all sections.
+     */
+    private void totalSectionEnrollment(){
+<span class="fc" id="L82">        int sum = 0;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for(Section section : sections) {</span>
+<span class="fc" id="L84">            sum += section.getNumEnrolled();</span>
+<span class="fc" id="L85">        }</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (sum &gt; offeringCapacity) {</span>
+<span class="fc" id="L87">            System.out.println(&quot;Number enrolled is greater than capacity&quot;);</span>
+<span class="fc" id="L88">            setNumEnrolled(offeringCapacity);</span>
+        } else {
+<span class="fc" id="L90">            setNumEnrolled(sum);</span>
+        }
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Calculates the capacity of an Offering by summing the capacity of all sections.
+     */
+    private void totalSectionCapacity(){
+<span class="fc" id="L98">        int sum = 0;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        for(Section section : sections) {</span>
+<span class="fc" id="L100">            sum += section.getCrossListCapacity();</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        setOfferingCapacity(sum);</span>
+    
+
+<span class="fc" id="L105">    }</span>
+
+    @Override
+    public Offering clone() {
+<span class="fc" id="L109">        List&lt;Section&gt; cloneSection = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (Section sect : sections) {</span>
+<span class="fc" id="L111">            cloneSection.add(sect.clone());</span>
+<span class="fc" id="L112">        }</span>
+<span class="fc" id="L113">        return new Offering(cloneSection, this.offeringCapacity, this.numEnrolled);</span>
+    }
+
+    @Override 
+    public boolean equals(Object obj){
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (obj instanceof Offering) {</span>
+<span class="fc" id="L119">            Offering o = (Offering) obj;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">            if (!sections.equals(o.sections))</span>
+<span class="nc" id="L121">                return false;</span>
+<span class="pc bpc" id="L122" title="1 of 4 branches missed.">            return offeringCapacity == o.offeringCapacity &amp;&amp; numEnrolled == o.numEnrolled;</span>
+        } else
+<span class="nc" id="L124">            return false;</span>
+    }
+
+    @Override 
+    public int hashCode() {
+<span class="fc" id="L129">        int result = 0;</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for(Section section : sections) {</span>
+<span class="fc" id="L131">            result += section.hashCode();</span>
+<span class="fc" id="L132">        }</span>
+<span class="fc" id="L133">        result += Integer.hashCode(offeringCapacity);</span>
+<span class="fc" id="L134">        result += Integer.hashCode(numEnrolled);</span>
+<span class="fc" id="L135">        return result;</span>
+    }
+
+    @Override
+    public String toString(){
+<span class="fc" id="L140">        String offeringString = (&quot;number enrolled: &quot; + numEnrolled);</span>
+<span class="fc" id="L141">        offeringString += (&quot;\n&quot; + &quot;offering capacity: &quot; + offeringCapacity);</span>
+<span class="fc" id="L142">        offeringString += (&quot;\n&quot; +&quot;offering name: &quot; + sections.get(0).getCrossListGroup()); </span>
+<span class="fc" id="L143">        return offeringString; </span>
+    }
+    
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
