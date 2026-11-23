@@ -64,6 +64,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Compares two Course objects for sorting.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#computeProjections()" class="member-name-link">computeProjections()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Computes projections for enrollment based on the historic enrollment data.</div>
+</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#contains(java.lang.String)" class="member-name-link">contains(String)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Checks if data for a specified semester exists in the HistoricEnrollment.</div>
+</dd>
 <dt><a href="edu/odu/cs/cs350/Course.html" class="type-name-link" title="class in edu.odu.cs.cs350">Course</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
 <dd>
 <div class="block">Represents a course offered by ODU with the course name, number of enrolled students,
@@ -156,6 +164,8 @@ based on the date and the list of courses.</div>
 </dd>
 <dt><a href="edu/odu/cs/cs350/EnrollmentSummary.html#getCourseName()" class="member-name-link">getCourseName()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/EnrollmentSummary.html" title="class in edu.odu.cs.cs350">EnrollmentSummary</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterSnapshot.html#getCourseNameList()" class="member-name-link">getCourseNameList()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterSnapshot.html" title="class in edu.odu.cs.cs350">SemesterSnapshot</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SnapshotReader.html#getCourseTitle(java.lang.String%5B%5D)" class="member-name-link">getCourseTitle(String[])</a> - Static method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SnapshotReader.html" title="class in edu.odu.cs.cs350">SnapshotReader</a></dt>
 <dd>
 <div class="block">Extracts the course title from CSV fields.</div>
@@ -193,6 +203,10 @@ uses the CRN if section has no cross-list group.</div>
 </dd>
 <dt><a href="edu/odu/cs/cs350/EnrollmentSummary.html#getMarker()" class="member-name-link">getMarker()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/EnrollmentSummary.html" title="class in edu.odu.cs.cs350">EnrollmentSummary</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#getNumberOfSemesters()" class="member-name-link">getNumberOfSemesters()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Get the number of semesters of historic data.</div>
+</dd>
 <dt><a href="edu/odu/cs/cs350/Offering.html#getNumEnrolled()" class="member-name-link">getNumEnrolled()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Offering.html" title="class in edu.odu.cs.cs350">Offering</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/Section.html#getNumEnrolled()" class="member-name-link">getNumEnrolled()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Section.html" title="class in edu.odu.cs.cs350">Section</a></dt>
@@ -211,10 +225,20 @@ uses the CRN if section has no cross-list group.</div>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/Offering.html#getSections()" class="member-name-link">getSections()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Offering.html" title="class in edu.odu.cs.cs350">Offering</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#getSemesterCode()" class="member-name-link">getSemesterCode()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#getSemesters()" class="member-name-link">getSemesters()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Gets the list of SemesterEnrollments held in the HistoricEnrollment.</div>
+</dd>
 <dt><a href="edu/odu/cs/cs350/SnapshotReader.html#getSnapshotFile(java.io.File,java.lang.String)" class="member-name-link">getSnapshotFile(File, String)</a> - Static method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SnapshotReader.html" title="class in edu.odu.cs.cs350">SnapshotReader</a></dt>
 <dd>
 <div class="block">Retrieves a CSV snapshot file for a specified date.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#getSnapshots()" class="member-name-link">getSnapshots()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterSnapshot.html#getSnapshotSize()" class="member-name-link">getSnapshotSize()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterSnapshot.html" title="class in edu.odu.cs.cs350">SemesterSnapshot</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/EnrollmentSummary.html#getTotalCap()" class="member-name-link">getTotalCap()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/EnrollmentSummary.html" title="class in edu.odu.cs.cs350">EnrollmentSummary</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/Course.html#getTotalEnrolledCapacity()" class="member-name-link">getTotalEnrolledCapacity()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Course.html" title="class in edu.odu.cs.cs350">Course</a></dt>
@@ -239,6 +263,16 @@ uses the CRN if section has no cross-list group.</div>
 <dt><a href="edu/odu/cs/cs350/SemesterSnapshot.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterSnapshot.html" title="class in edu.odu.cs.cs350">SemesterSnapshot</a></dt>
 <dd>
 <div class="block">Computes the hashcode value for the SemesterSnaphot object.</div>
+</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html" class="type-name-link" title="class in edu.odu.cs.cs350">HistoricEnrollment</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#%3Cinit%3E()" class="member-name-link">HistoricEnrollment()</a> - Constructor for class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Default constructor for HistoricEnrollment.</div>
+</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#%3Cinit%3E(java.lang.String%5B%5D)" class="member-name-link">HistoricEnrollment(String[])</a> - Constructor for class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>
+<div class="block">Full constructor for HistoricEnrollment.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
@@ -330,6 +364,12 @@ the capacity of the section, and the CRN.</div>
 <dd>
 <div class="block">Full constructor for section</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html" class="type-name-link" title="class in edu.odu.cs.cs350">SemesterEnrollment</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#%3Cinit%3E()" class="member-name-link">SemesterEnrollment()</a> - Constructor for class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#%3Cinit%3E(java.lang.String)" class="member-name-link">SemesterEnrollment(String)</a> - Constructor for class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SemesterSnapshot.html" class="type-name-link" title="class in edu.odu.cs.cs350">SemesterSnapshot</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
 <dd>
 <div class="block">SemesterSnapshot - Represents snapshot of enrollment data (courses, 
@@ -354,6 +394,8 @@ offerings, and sections) for a list of (CS) courses on a specified date.</div>
 <dt><a href="edu/odu/cs/cs350/Section.html#setNumEnrolled(int)" class="member-name-link">setNumEnrolled(int)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Section.html" title="class in edu.odu.cs.cs350">Section</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/Offering.html#setOfferingCapacity(int)" class="member-name-link">setOfferingCapacity(int)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Offering.html" title="class in edu.odu.cs.cs350">Offering</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#setSemesterCode(java.lang.String)" class="member-name-link">setSemesterCode(String)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SnapshotReader.html" class="type-name-link" title="class in edu.odu.cs.cs350">SnapshotReader</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
 <dd>

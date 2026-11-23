@@ -58,6 +58,18 @@ public class SemesterSnapshot {
 <span class="fc" id="L58">        return copyList;</span>
     }
 
+    public List&lt;String&gt; getCourseNameList() {
+<span class="fc" id="L62">        List&lt;String&gt; courseNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        for (Course course : courseList) {</span>
+<span class="fc" id="L64">            courseNames.add(course.getCourseName());</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        return courseNames;</span>
+    }
+
+    public int getSnapshotSize() {
+<span class="nc" id="L70">        return courseList.size();</span>
+    }
+
     /**
      * Gets a course from the course list at a specified index
      * 
@@ -65,7 +77,7 @@ public class SemesterSnapshot {
      * @return the specified course
      */
     public Course getCourse(int index) {
-<span class="fc" id="L68">        return courseList.get(index).clone();</span>
+<span class="fc" id="L80">        return courseList.get(index).clone();</span>
     }
 
     /**
@@ -75,13 +87,13 @@ public class SemesterSnapshot {
      * @return the index in the list of the course
      */
     public int findCourse(String courseName) {
-<span class="fc" id="L78">        int index = -1;</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Course course : courseList) {</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (course.getCourseName().equals(courseName)) {</span>
-<span class="fc" id="L81">                index = courseList.indexOf(course);</span>
+<span class="fc" id="L90">        int index = -1;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (Course course : courseList) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (course.getCourseName().equals(courseName)) {</span>
+<span class="fc" id="L93">                index = courseList.indexOf(course);</span>
             }
-<span class="fc" id="L83">        }</span>
-<span class="fc" id="L84">        return index;</span>
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        return index;</span>
     }
 
     /**
@@ -92,14 +104,14 @@ public class SemesterSnapshot {
      */
     @Override 
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (this == obj) {</span>
-<span class="nc" id="L96">            return true;</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (this == obj) {</span>
+<span class="nc" id="L108">            return true;</span>
         }
-<span class="pc bpc" id="L98" title="2 of 4 branches missed.">        if (obj == null || getClass() != obj.getClass()) {</span>
-<span class="nc" id="L99">            return false;</span>
+<span class="pc bpc" id="L110" title="2 of 4 branches missed.">        if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L111">            return false;</span>
         }
-<span class="fc" id="L101">        SemesterSnapshot semSnap = (SemesterSnapshot) obj;</span>
-<span class="pc bpc" id="L102" title="2 of 4 branches missed.">        return date.equals(semSnap.date) &amp;&amp; (courseList.equals(semSnap.courseList));</span>
+<span class="fc" id="L113">        SemesterSnapshot semSnap = (SemesterSnapshot) obj;</span>
+<span class="pc bpc" id="L114" title="2 of 4 branches missed.">        return date.equals(semSnap.date) &amp;&amp; (courseList.equals(semSnap.courseList));</span>
     }
 
     /**
@@ -109,12 +121,12 @@ public class SemesterSnapshot {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L112">        int hash = 0;</span>
-<span class="fc" id="L113">        hash += (37 * date.hashCode());</span>
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        for (Course course : courseList) {</span>
-<span class="nc" id="L115">            hash += (373 * course.hashCode());</span>
-<span class="nc" id="L116">        }</span>
-<span class="fc" id="L117">        return hash;</span>
+<span class="fc" id="L124">        int hash = 0;</span>
+<span class="fc" id="L125">        hash += (37 * date.hashCode());</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        for (Course course : courseList) {</span>
+<span class="nc" id="L127">            hash += (373 * course.hashCode());</span>
+<span class="nc" id="L128">        }</span>
+<span class="fc" id="L129">        return hash;</span>
     }
 
     /**
@@ -125,13 +137,13 @@ public class SemesterSnapshot {
      */
     @Override
     public String toString() {
-<span class="fc" id="L128">        StringBuilder semSnapSB = new StringBuilder();</span>
-<span class="fc" id="L129">        semSnapSB.append(String.format(&quot;Semester Snapshot%n&quot;));</span>
-<span class="fc" id="L130">        semSnapSB.append(String.format(&quot;Date: %s%nCourses:%n&quot;, this.date));</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        for (Course course : courseList) {</span>
-<span class="fc" id="L132">            semSnapSB.append(String.format(&quot;%s%n&quot;, course.getCourseName()));</span>
-<span class="fc" id="L133">        }</span>
-<span class="fc" id="L134">        return semSnapSB.toString();</span>
+<span class="fc" id="L140">        StringBuilder semSnapSB = new StringBuilder();</span>
+<span class="fc" id="L141">        semSnapSB.append(String.format(&quot;Semester Snapshot%n&quot;));</span>
+<span class="fc" id="L142">        semSnapSB.append(String.format(&quot;Date: %s%nCourses:%n&quot;, this.date));</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (Course course : courseList) {</span>
+<span class="fc" id="L144">            semSnapSB.append(String.format(&quot;%s%n&quot;, course.getCourseName()));</span>
+<span class="fc" id="L145">        }</span>
+<span class="fc" id="L146">        return semSnapSB.toString();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
