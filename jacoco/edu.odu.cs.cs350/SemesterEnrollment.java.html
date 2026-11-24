@@ -20,58 +20,74 @@ public class SemesterEnrollment {
 <span class="fc" id="L20">        this.semesterCode = directoryPath.substring(directoryNameIndex);</span>
 <span class="fc" id="L21">        this.snapshots = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L22">        buildSemesterEnrollment(directoryPath);</span>
-<span class="fc" id="L23">    }</span>
+        // Add a .sort() to snapshots here to make sure they are date ordered properly
+<span class="fc" id="L24">    }</span>
 
     public String getSemesterCode() {
-<span class="fc" id="L26">        return semesterCode;</span>
+<span class="fc" id="L27">        return semesterCode;</span>
     }
 
     public List&lt;SemesterSnapshot&gt; getSnapshots() {
-<span class="fc" id="L30">        return snapshots;</span>
+<span class="fc" id="L31">        return snapshots;</span>
     }
 
     public void setSemesterCode(String semesterCode) {
-<span class="nc" id="L34">        this.semesterCode = semesterCode;</span>
-<span class="nc" id="L35">    }</span>
+<span class="nc" id="L35">        this.semesterCode = semesterCode;</span>
+<span class="nc" id="L36">    }</span>
+
+    public SemesterSnapshot getSemesterSnapshot(int index) {
+<span class="nc" id="L39">        return snapshots.get(index);</span>
+    }
+
+    
+
+    public double getDateIndex(String date) {
+        //TODO:
+        //  1. Use the passed in date to find the index of the desired date in snapshots
+        //  2. Divide the index by the total size of snapshot, forcing into a double
+        //  3. Return the double.
+
+<span class="fc" id="L50">        return 0.5;</span>
+    }
 
     private void buildSemesterEnrollment(String directoryPath) throws IOException {
 
-<span class="fc" id="L39">        File directory = new File(directoryPath);</span>
-<span class="fc" id="L40">        File[] directoryFiles = directory.listFiles();</span>
+<span class="fc" id="L55">        File directory = new File(directoryPath);</span>
+<span class="fc" id="L56">        File[] directoryFiles = directory.listFiles();</span>
         
-<span class="fc" id="L42">        String startDate = &quot;&quot;;</span>
-<span class="fc" id="L43">        String endDate = &quot;&quot;;</span>
+<span class="fc" id="L58">        String startDate = &quot;&quot;;</span>
+<span class="fc" id="L59">        String endDate = &quot;&quot;;</span>
 
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        for(File file : directoryFiles){</span>
-<span class="pc bpc" id="L46" title="1 of 4 branches missed.">            if(file.isFile() &amp;&amp; file.getName().equals(&quot;dates.txt&quot;)){</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for(File file : directoryFiles){</span>
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">            if(file.isFile() &amp;&amp; file.getName().equals(&quot;dates.txt&quot;)){</span>
                 //I'll handle this handling later
-<span class="fc" id="L48">                Scanner fileScanner = new Scanner(file);</span>
-<span class="fc" id="L49">                startDate = fileScanner.nextLine();</span>
-<span class="fc" id="L50">                endDate = fileScanner.nextLine();</span>
-<span class="fc" id="L51">                fileScanner.close();</span>
+<span class="fc" id="L64">                Scanner fileScanner = new Scanner(file);</span>
+<span class="fc" id="L65">                startDate = fileScanner.nextLine();</span>
+<span class="fc" id="L66">                endDate = fileScanner.nextLine();</span>
+<span class="fc" id="L67">                fileScanner.close();</span>
             }
         }
 
-<span class="fc" id="L55">        selectFilesInDate(startDate, endDate, directoryFiles);</span>
+<span class="fc" id="L71">        selectFilesInDate(startDate, endDate, directoryFiles);</span>
         
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L73">    }</span>
 
     private void selectFilesInDate(String startDate, String endDate, File[] directoryFiles) throws IOException {
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        for(File file : directoryFiles){</span>
-<span class="fc" id="L61">            String fileName = file.getName().replace(&quot;.csv&quot;, &quot;&quot;);</span>
-<span class="pc bpc" id="L62" title="1 of 6 branches missed.">            if(file.isFile() &amp;&amp; !file.getName().contains(&quot;txt&quot;) &amp;&amp; betweenDates(fileName, startDate, endDate)){</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for(File file : directoryFiles){</span>
+<span class="fc" id="L77">            String fileName = file.getName().replace(&quot;.csv&quot;, &quot;&quot;);</span>
+<span class="pc bpc" id="L78" title="1 of 6 branches missed.">            if(file.isFile() &amp;&amp; !file.getName().contains(&quot;txt&quot;) &amp;&amp; betweenDates(fileName, startDate, endDate)){</span>
                 //More error handling for another day
-<span class="fc" id="L64">                SemesterSnapshot snapshot = SnapshotReader.readSemesterSnapshot(file, fileName);</span>
-<span class="fc" id="L65">                snapshots.add(snapshot);</span>
+<span class="fc" id="L80">                SemesterSnapshot snapshot = SnapshotReader.readSemesterSnapshot(file, fileName);</span>
+<span class="fc" id="L81">                snapshots.add(snapshot);</span>
             }
         }
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L84">    }</span>
 
     private boolean betweenDates(String fileName, String startDate, String endDate){
-<span class="fc" id="L71">        int fileDate = Integer.parseInt(fileName.replace(&quot;-&quot;, &quot;&quot;));</span>
-<span class="fc" id="L72">        int startNum = Integer.parseInt(startDate.replace(&quot;-&quot;, &quot;&quot;));</span>
-<span class="fc" id="L73">        int endNum = Integer.parseInt(endDate.replace(&quot;-&quot;, &quot;&quot;));</span>
-<span class="fc bfc" id="L74" title="All 4 branches covered.">        return fileDate &gt;= startNum &amp;&amp; fileDate &lt;= endNum;</span>
+<span class="fc" id="L87">        int fileDate = Integer.parseInt(fileName.replace(&quot;-&quot;, &quot;&quot;));</span>
+<span class="fc" id="L88">        int startNum = Integer.parseInt(startDate.replace(&quot;-&quot;, &quot;&quot;));</span>
+<span class="fc" id="L89">        int endNum = Integer.parseInt(endDate.replace(&quot;-&quot;, &quot;&quot;));</span>
+<span class="fc bfc" id="L90" title="All 4 branches covered.">        return fileDate &gt;= startNum &amp;&amp; fileDate &lt;= endNum;</span>
     }
 
     

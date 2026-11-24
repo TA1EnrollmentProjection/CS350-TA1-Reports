@@ -186,6 +186,8 @@ based on the date and the list of courses.</div>
 <dd>
 <div class="block">Get the date associated with the snapshot.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#getDateIndex(java.lang.String)" class="member-name-link">getDateIndex(String)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SnapshotReader.html#getDirectory(java.lang.String%5B%5D)" class="member-name-link">getDirectory(String[])</a> - Static method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SnapshotReader.html" title="class in edu.odu.cs.cs350">SnapshotReader</a></dt>
 <dd>
 <div class="block">Obtains a directory path provided through
@@ -201,6 +203,8 @@ within a specified directory.</div>
 <div class="block">Retrieves the grouping key for a section and
 uses the CRN if section has no cross-list group.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#getLastDayEnrollment()" class="member-name-link">getLastDayEnrollment()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/EnrollmentSummary.html#getMarker()" class="member-name-link">getMarker()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/EnrollmentSummary.html" title="class in edu.odu.cs.cs350">EnrollmentSummary</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#getNumberOfSemesters()" class="member-name-link">getNumberOfSemesters()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
@@ -223,7 +227,11 @@ uses the CRN if section has no cross-list group.</div>
 </dd>
 <dt><a href="edu/odu/cs/cs350/EnrollmentSummary.html#getProjectedEnrollment()" class="member-name-link">getProjectedEnrollment()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/EnrollmentSummary.html" title="class in edu.odu.cs.cs350">EnrollmentSummary</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/Projection.html#getProjections()" class="member-name-link">getProjections()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Projection.html" title="class in edu.odu.cs.cs350">Projection</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/Offering.html#getSections()" class="member-name-link">getSections()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Offering.html" title="class in edu.odu.cs.cs350">Offering</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="edu/odu/cs/cs350/HistoricEnrollment.html#getSemester(int)" class="member-name-link">getSemester(int)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/HistoricEnrollment.html" title="class in edu.odu.cs.cs350">HistoricEnrollment</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#getSemesterCode()" class="member-name-link">getSemesterCode()</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
 <dd>&nbsp;</dd>
@@ -231,6 +239,8 @@ uses the CRN if section has no cross-list group.</div>
 <dd>
 <div class="block">Gets the list of SemesterEnrollments held in the HistoricEnrollment.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/SemesterEnrollment.html#getSemesterSnapshot(int)" class="member-name-link">getSemesterSnapshot(int)</a> - Method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SemesterEnrollment.html" title="class in edu.odu.cs.cs350">SemesterEnrollment</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="edu/odu/cs/cs350/SnapshotReader.html#getSnapshotFile(java.io.File,java.lang.String)" class="member-name-link">getSnapshotFile(File, String)</a> - Static method in class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/SnapshotReader.html" title="class in edu.odu.cs.cs350">SnapshotReader</a></dt>
 <dd>
 <div class="block">Retrieves a CSV snapshot file for a specified date.</div>
@@ -327,6 +337,13 @@ and extracts the course title without lab or recitation information.</div>
 <dd>
 <div class="block">Parses a CSV line into a Section object.</div>
 </dd>
+<dt><a href="edu/odu/cs/cs350/Projection.html" class="type-name-link" title="class in edu.odu.cs.cs350">Projection</a> - Class in <a href="edu/odu/cs/cs350/package-summary.html">edu.odu.cs.cs350</a></dt>
+<dd>
+<div class="block">Projection - Represents the projected number of students that will be enrolled in 
+a specified course for the current semester based on historic enrollment numbers.</div>
+</dd>
+<dt><a href="edu/odu/cs/cs350/Projection.html#%3Cinit%3E(edu.odu.cs.cs350.SemesterEnrollment,edu.odu.cs.cs350.HistoricEnrollment,double)" class="member-name-link">Projection(SemesterEnrollment, HistoricEnrollment, double)</a> - Constructor for class edu.odu.cs.cs350.<a href="edu/odu/cs/cs350/Projection.html" title="class in edu.odu.cs.cs350">Projection</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">

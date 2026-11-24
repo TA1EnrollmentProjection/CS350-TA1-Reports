@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Projection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project</a> &gt; <a href="index.source.html" class="el_package">edu.odu.cs.cs350</a> &gt; <span class="el_source">Projection.java</span></div><h1>Projection.java</h1><pre class="source lang-java linenums">package edu.odu.cs.cs350;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * Projection - Represents the projected number of students that will be enrolled in 
+ * a specified course for the current semester based on historic enrollment numbers.
+ * 
+ * @author David Ortiz
+ * @author Mark Foust
+ */
+public class Projection {
+    // Data members
+<span class="fc" id="L17">    private final double LAST_DAY = 1.0;</span>
+    private HashMap&lt;String, Integer&gt; projections;
+    
+<span class="fc" id="L20">    public Projection(SemesterEnrollment current, HistoricEnrollment historic, double dayIndex) {</span>
+<span class="fc" id="L21">        compute(current, historic, dayIndex);</span>
+<span class="fc" id="L22">    }</span>
+
+    public HashMap&lt;String, Integer&gt; getProjections() {
+<span class="fc" id="L25">        return projections;</span>
+    }
+    
+    private void compute(SemesterEnrollment current, HistoricEnrollment historic, double dayIndex) {
+<span class="fc" id="L29">        List&lt;String&gt; courseNames = getAllCourseNames(current.getSnapshots());</span>
+<span class="fc" id="L30">        Integer[] lastDayEnrollments = getHistoricEnrollments(courseNames, historic, LAST_DAY);</span>
+<span class="fc" id="L31">        Integer[] specificDayEnrollments = getHistoricEnrollments(courseNames, historic, dayIndex);</span>
+<span class="fc" id="L32">        Integer[] currentEnrollments = getCourseEnrollments(current, courseNames, dayIndex);</span>
+<span class="fc" id="L33">        Integer[] projectionNumbers = computeProjections(lastDayEnrollments, specificDayEnrollments, currentEnrollments);</span>
+<span class="fc" id="L34">        projections = mergeNameAndProjection(courseNames, projectionNumbers);</span>
+<span class="fc" id="L35">    }</span>
+
+    private List&lt;String&gt; getAllCourseNames(List&lt;SemesterSnapshot&gt; snapshots) {
+<span class="fc" id="L38">        List&lt;String&gt; courseNames = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (SemesterSnapshot snap : snapshots) {</span>
+<span class="fc" id="L40">            List&lt;Course&gt; courseList = snap.getCourseList();</span>
+<span class="fc" id="L41">            courseList.forEach((course) -&gt; {</span>
+<span class="fc" id="L42">                String courseName = course.getCourseName();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">                if (!courseNames.contains(courseName)) {</span>
+<span class="fc" id="L44">                    courseNames.add(courseName);</span>
+                }
+<span class="fc" id="L46">            });</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">        Collections.sort(courseNames);</span>
+<span class="fc" id="L49">        return courseNames;</span>
+    }
+
+    private Integer[] getHistoricEnrollments(List&lt;String&gt; current, HistoricEnrollment historic, double dayIndex) {
+<span class="fc" id="L53">        int numberOfSemesters = historic.getNumberOfSemesters();</span>
+<span class="fc" id="L54">        int numberOfCourses = current.size();</span>
+<span class="fc" id="L55">        List&lt;SemesterEnrollment&gt; semesters = historic.getSemesters();</span>
+<span class="fc" id="L56">        Integer[][] lastDayEnrollments = new Integer[numberOfSemesters][numberOfCourses];</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (int semester = 0; semester &lt; numberOfSemesters; semester++) {</span>
+<span class="fc" id="L58">            lastDayEnrollments[semester] = getCourseEnrollments(semesters.get(semester), current, dayIndex);</span>
+        }
+<span class="fc" id="L60">        return averageEnrollments(lastDayEnrollments);</span>
+    }
+
+    private Integer[] getCourseEnrollments(SemesterEnrollment semester, List&lt;String&gt; current, double dayIndex) {
+<span class="fc" id="L64">        Integer[] enrollments = new Integer[current.size()];</span>
+<span class="fc" id="L65">        List&lt;SemesterSnapshot&gt; snapshots = semester.getSnapshots();</span>
+<span class="fc" id="L66">        int desiredDate = (int) ((snapshots.size() - 1) * dayIndex);</span>
+<span class="fc" id="L67">        SemesterSnapshot desiredSnapshot = snapshots.get(desiredDate);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (int course = 0; course &lt; current.size(); course++) {</span>
+<span class="fc" id="L69">            int courseIndex = desiredSnapshot.findCourse(current.get(course));</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">            if (courseIndex &gt;= 0) {</span>
+<span class="fc" id="L71">                Course desiredCourse = desiredSnapshot.getCourse(courseIndex);</span>
+<span class="fc" id="L72">                enrollments[course] = desiredCourse.getNumEnrolledStudents();</span>
+<span class="fc" id="L73">            } else {</span>
+<span class="fc" id="L74">                enrollments[course] = 0;</span>
+            }
+        }
+<span class="fc" id="L77">        return enrollments;</span>
+    }
+
+    private Integer[] averageEnrollments(Integer[][] enrollments) {
+<span class="fc" id="L81">        int numberOfEnrollments = enrollments.length;</span>
+<span class="fc" id="L82">        Integer[] averagedEnrollments = new Integer[enrollments[0].length];</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (int index = 0; index &lt; averagedEnrollments.length; index++) {</span>
+<span class="fc" id="L84">            int sum = sumEnrollments(enrollments, index);</span>
+<span class="fc" id="L85">            int averaged = sum / numberOfEnrollments;</span>
+<span class="fc" id="L86">            averagedEnrollments[index] = averaged;</span>
+        }
+<span class="fc" id="L88">        return averagedEnrollments;</span>
+    }
+
+    private int sumEnrollments(Integer[][] enrollments, int index) {
+<span class="fc" id="L92">        int sumTotal = 0;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (int i = 0; i &lt; enrollments.length; i++) {</span>
+<span class="fc" id="L94">            sumTotal += enrollments[i][index];</span>
+        }
+<span class="fc" id="L96">        return sumTotal;</span>
+    }
+
+    private Integer[] computeProjections(Integer[] lastDay, Integer[] targetDay, Integer[] current) {
+<span class="fc" id="L100">        Integer[] projections = new Integer[current.length];</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        for (int index = 0; index &lt; projections.length; index++) {</span>
+<span class="fc" id="L102">            double projection = (double) (current[index] * lastDay[index]) / targetDay[index];</span>
+<span class="fc" id="L103">            projections[index] = (int) Math.round(projection);</span>
+        }
+<span class="fc" id="L105">        return projections;</span>
+    }
+
+    private HashMap&lt;String, Integer&gt; mergeNameAndProjection(List&lt;String&gt; names, Integer[] numbers) {
+<span class="fc" id="L109">        HashMap&lt;String, Integer&gt; tempNumbers = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (int i = 0; i &lt; names.size(); i++) {</span>
+<span class="fc" id="L111">            tempNumbers.put(names.get(i), numbers[i]);</span>
+        }
+<span class="fc" id="L113">        return tempNumbers;</span>
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    
+    /**
+     * Computes projections for enrollment based on the historic enrollment data.
+     * 
+     * @return a map of courses to projected enrollment number
+     
+    public HashMap&lt;String, Integer&gt; compute(HistoricEnrollment historic) {
+        List&lt;SemesterEnrollment&gt; semesters = historic.getSemesters();
+        String[] courseNames = getAllCourseNames(semesters);
+        Integer[] projectionNumbers = projectionComputations(courseNames.length, semesters);
+        this.projections = mergeNameAndProjection(courseNames, projectionNumbers);
+        return projections;
+    }
+
+    private String[] getAllCourseNames(List&lt;SemesterEnrollment&gt; semesters) {
+        String[] courseNames = new String[0];
+        for (SemesterEnrollment semester : semesters) {
+            String[] tempNames = filterAllCourseNames(semester.getSnapshots());
+            if (tempNames.length &gt; courseNames.length) {
+                courseNames = tempNames;
+            }
+        }
+        return courseNames;
+    }
+
+    private String[] filterAllCourseNames(List&lt;SemesterSnapshot&gt; snapshots) {
+        List&lt;String&gt; courseNames = new ArrayList&lt;&gt;();
+        for (SemesterSnapshot snapshot: snapshots) {
+            List&lt;String&gt; tempList = snapshot.getCourseNameList();
+            if (tempList.size() &gt; courseNames.size()) {
+                courseNames = tempList;
+            }
+        }
+        return courseNames.toArray(new String[courseNames.size()]);
+    }
+
+    private Integer[] projectionComputations(int numberOfCourses, List&lt;SemesterEnrollment&gt; semesters) {
+        Integer[] projectionNumbers = new Integer[numberOfCourses];
+        Integer[][] enrollmentsPerSemester = new Integer[semesters.size()][numberOfCourses];
+        for (SemesterEnrollment semester : semesters) {
+
+        }
+        return projectionNumbers;
+    }
+
+    private Integer[] getEnrollmentsForSemester(int numberOfCourses, SemesterEnrollment semester) {
+        Integer[] enrollments = new Integer[numberOfCourses];
+        SemesterSnap
+        for (int course = 0; course &lt; numberOfCourses; course++) {
+
+        }
+    }
+
+    
+    */
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
